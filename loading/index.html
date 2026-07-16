@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+        font-family: Arial, sans-serif;
+    }
+
+    #bg {
+        position: absolute;
+        top: -3%;
+        left: -3%;
+        width: 106%;
+        height: 106%;
+        background-image: url("loadingcreenprincipale.png");
+        background-size: cover;
+        background-position: center;
+        animation: kenburns 40s ease-in-out infinite alternate;
+    }
+
+    @keyframes kenburns {
+        0%   { transform: scale(1) translate(0, 0); }
+        100% { transform: scale(1.08) translate(-1%, -1%); }
+    }
+
+    #status {
+        position: absolute;
+        bottom: 66px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: #ffffff;
+        font-size: 18px;
+        text-shadow: 0 0 8px rgba(0,0,0,0.9);
+        letter-spacing: 1px;
+    }
+
+    #tip-wrap {
+        position: absolute;
+        bottom: 106px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 0 15%;
+        box-sizing: border-box;
+    }
+
+    #tip {
+        display: inline-block;
+        color: #f0d8e8;
+        font-size: 13.5px;
+        font-style: italic;
+        text-shadow: 0 0 6px rgba(0,0,0,0.9);
+        opacity: 0;
+        transition: opacity 0.6s ease;
+    }
+
+    #tip.visible {
+        opacity: 1;
+    }
+
+    #tip b {
+        color: #ff8ecf;
+        font-style: normal;
+        font-weight: 700;
+    }
+
+    #bar-container {
+        position: absolute;
+        bottom: 30px;
+        left: 10%;
+        width: 80%;
+        height: 14px;
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.4);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    #bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #ff2e88, #ff6ec7);
+        box-shadow: 0 0 12px #ff2e88;
+        transition: width 0.3s ease;
+    }
+
+    #bar-info {
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        color: #ffb6da;
+        font-size: 13px;
+        text-shadow: 0 0 6px rgba(0,0,0,0.9);
+        letter-spacing: 0.5px;
+    }
+
+    #creators-wrap {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #creators-title {
+        color: #f0e0c0;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        text-shadow: 0 0 6px rgba(0,0,0,0.9);
+        margin-bottom: 8px;
+    }
+
+    #creators {
+        display: flex;
+        gap: 10px;
+    }
+
+    .creator-card {
+        position: relative;
+        width: 70px;
+        padding: 6px 6px 8px 6px;
+        background: linear-gradient(160deg, rgba(40,10,20,0.55), rgba(10,2,6,0.65));
+        border: 1px solid rgba(230,200,150,0.55);
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,0.4), 0 3px 10px rgba(0,0,0,0.45);
+    }
+
+    .creator-card .corner {
+        position: absolute;
+        width: 9px;
+        height: 9px;
+        border: 1.5px solid #e8c896;
+    }
+
+    .creator-card .corner.tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .creator-card .corner.tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+    .creator-card .corner.bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+    .creator-card .corner.br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+    .creator-card img {
+        width: 100%;
+        height: 56px;
+        object-fit: cover;
+        display: block;
+        filter: sepia(0.15) saturate(1.05);
+    }
+
+    .creator-card span {
+        display: block;
+        text-align: center;
+        margin-top: 6px;
+        color: #f0e0c0;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        text-shadow: 0 0 5px rgba(0,0,0,0.9);
+    }
+
+    #discord-btn {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(88,101,242,0.18);
+        border: 1px solid rgba(88,101,242,0.55);
+        border-radius: 20px;
+        padding: 7px 16px 7px 10px;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    #discord-btn:hover {
+        background: rgba(88,101,242,0.32);
+        transform: translateY(-1px);
+    }
+
+    #discord-btn svg {
+        width: 20px;
+        height: 20px;
+        fill: #ffffff;
+        flex-shrink: 0;
+    }
+
+    #discord-btn span {
+        color: #ffffff;
+        font-size: 12.5px;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        text-shadow: 0 0 6px rgba(0,0,0,0.6);
+    }
+
+    #sound-wrap {
+        position: absolute;
+        bottom: 24px;
+        left: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(0,0,0,0.4);
+        border: 1px solid rgba(255,110,199,0.3);
+        border-radius: 20px;
+        padding: 6px 14px 6px 6px;
+    }
+
+    #sound-toggle {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,110,199,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+
+    #volume-slider {
+        -webkit-appearance: none;
+        width: 80px;
+        height: 4px;
+        border-radius: 2px;
+        background: rgba(255,255,255,0.2);
+        outline: none;
+        cursor: pointer;
+    }
+
+    #volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #ff6ec7;
+        box-shadow: 0 0 6px #ff2e88;
+        cursor: pointer;
+    }
+
+    #server-info {
+        position: absolute;
+        top: 78px;
+        left: 24px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(255,255,255,0.75);
+        font-size: 11.5px;
+        letter-spacing: 0.4px;
+        text-shadow: 0 0 6px rgba(0,0,0,0.9);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    #server-info.visible {
+        opacity: 1;
+    }
+
+    #server-info .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #3ce27a;
+        box-shadow: 0 0 6px #3ce27a;
+        flex-shrink: 0;
+    }
+</style>
+</head>
+<body>
+
+<div id="bg"></div>
+
+<div id="discord-btn" onclick="openDiscord()">
+    <svg viewBox="0 0 24 24"><path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.375-.444.864-.608 1.25-1.844-.276-3.68-.276-5.487 0-.164-.395-.406-.875-.617-1.25a.077.077 0 0 0-.079-.036A19.736 19.736 0 0 0 3.677 4.492a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.061.061 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.947 2.38-2.157 2.38z"/></svg>
+    <span>Rejoindre le Discord</span>
+</div>
+
+<div id="server-info"><div class="dot"></div><span id="server-info-text">Connexion...</span></div>
+
+<audio id="bgmusic" src="music.mp3" loop autoplay muted></audio>
+<div id="sound-wrap">
+    <div id="sound-toggle" onclick="toggleSound()">🔇</div>
+    <input type="range" id="volume-slider" min="0" max="100" value="50" oninput="setVolume(this.value)">
+</div>
+
+<div id="creators-wrap">
+    <div id="creators-title">Créateurs</div>
+    <div id="creators">
+        <div class="creator-card">
+            <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+            <img src="pp_zuma.gif">
+            <span>Zuma</span>
+        </div>
+        <div class="creator-card">
+            <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+            <img src="pp_tek.png">
+            <span>Tek</span>
+        </div>
+        <div class="creator-card">
+            <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+            <img src="pp_sleyz.png">
+            <span>Sleyz</span>
+        </div>
+    </div>
+</div>
+
+<div id="tip-wrap"><span id="tip"></span></div>
+
+<div id="status">Chargement...</div>
+<div id="bar-container"><div id="bar"></div></div>
+<div id="bar-info">0%</div>
+
+<script>
+    var filesTotal = 0;
+    var filesNeeded = 0;
+
+    var tips = [
+        "Rejoins <b>Konoha</b>, <b>Kiri</b>, <b>Suna</b> ou <b>Oto</b> et forge ton destin de ninja.",
+        "Enchaîne les victoires en <b>Ranked</b> pour grimper le classement.",
+        "Maîtrise l'esquive et le timing : chaque duel se joue sur les réflexes.",
+        "Étudie tes adversaires : chaque style de combat a ses forces et ses failles.",
+        "Chaque village a son propre style de combat et ses techniques uniques.",
+        "Rejoins notre Discord pour suivre les mises à jour du serveur !"
+    ];
+
+    var tipIndex = 0;
+
+    function showNextTip() {
+        var el = document.getElementById("tip");
+        el.classList.remove("visible");
+        setTimeout(function() {
+            el.innerHTML = tips[tipIndex % tips.length];
+            tipIndex++;
+            el.classList.add("visible");
+        }, 600);
+    }
+
+    function updateBar() {
+        var bar = document.getElementById("bar");
+        var info = document.getElementById("bar-info");
+        if (filesTotal <= 0) return;
+        var downloaded = filesTotal - filesNeeded;
+        var pct = Math.max(0, Math.min(100, (downloaded / filesTotal) * 100));
+        bar.style.width = pct + "%";
+        info.innerText = Math.round(pct) + "% — " + downloaded + " / " + filesTotal + " fichiers";
+    }
+
+    function SetFilesTotal(n) {
+        filesTotal = n;
+        updateBar();
+    }
+
+    function SetFilesNeeded(n) {
+        filesNeeded = n;
+        updateBar();
+    }
+
+    function SetStatusChanged(status) {
+        document.getElementById("status").innerText = status;
+    }
+
+    function DownloadingFile(filename) {
+        document.getElementById("status").innerText = "Téléchargement : " + filename;
+    }
+
+    function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode, musicVolume, language, niceGamemode) {
+        document.getElementById("status").innerText = "Connexion à " + servername + "...";
+
+        var infoEl = document.getElementById("server-info");
+        var textEl = document.getElementById("server-info-text");
+        textEl.innerText = maxplayers + " joueurs max — " + mapname;
+        infoEl.classList.add("visible");
+    }
+
+    function openDiscord() {
+        var url = "https://discord.gg/QDRvjyYafk";
+        if (typeof gmodopenurl === "function") {
+            gmodopenurl(url);
+        } else {
+            window.open(url, "_blank");
+        }
+    }
+
+    function toggleSound() {
+        var audio = document.getElementById("bgmusic");
+        var btn = document.getElementById("sound-toggle");
+        audio.muted = !audio.muted;
+        if (!audio.muted) {
+            audio.play().catch(function() {});
+            btn.innerText = "🔊";
+        } else {
+            btn.innerText = "🔇";
+        }
+    }
+
+    function setVolume(val) {
+        var audio = document.getElementById("bgmusic");
+        var btn = document.getElementById("sound-toggle");
+        audio.volume = val / 100;
+        if (val > 0 && audio.muted) {
+            audio.muted = false;
+            audio.play().catch(function() {});
+            btn.innerText = "🔊";
+        } else if (val == 0) {
+            audio.muted = true;
+            btn.innerText = "🔇";
+        }
+    }
+
+    // Try to unmute automatically if the browser allows audio autoplay
+    window.addEventListener("load", function() {
+        var audio = document.getElementById("bgmusic");
+        audio.volume = document.getElementById("volume-slider").value / 100;
+        audio.play().then(function() {
+            audio.muted = false;
+            document.getElementById("sound-toggle").innerText = "🔊";
+        }).catch(function() {
+            // Autoplay with sound blocked, stays muted until user clicks
+        });
+
+        showNextTip();
+        setInterval(showNextTip, 5000);
+    });
+</script>
+
+</body>
+</html>
