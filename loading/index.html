@@ -169,34 +169,6 @@
         text-shadow: 0 0 5px rgba(0,0,0,0.9);
     }
 
-    #sound-wrap {
-        position: absolute;
-        bottom: 24px;
-        left: 24px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(0,0,0,0.4);
-        border: 1px solid rgba(255,110,199,0.3);
-        border-radius: 20px;
-        padding: 6px 14px 6px 6px;
-    }
-
-    #sound-toggle {
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,110,199,0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        user-select: none;
-        font-size: 13px;
-        flex-shrink: 0;
-    }
-
     #server-info {
         position: absolute;
         top: 78px;
@@ -233,9 +205,6 @@
 <div id="server-info"><div class="dot"></div><span id="server-info-text">Connexion...</span></div>
 
 <audio id="bgmusic" src="music.mp3" loop autoplay muted></audio>
-<div id="sound-wrap">
-    <div id="sound-toggle" onclick="toggleSound()">🔇</div>
-</div>
 
 <div id="creators-wrap">
     <div id="creators-title">Créateurs</div>
@@ -326,27 +295,14 @@
         infoEl.classList.add("visible");
     }
 
-    function toggleSound() {
-        var audio = document.getElementById("bgmusic");
-        var btn = document.getElementById("sound-toggle");
-        audio.muted = !audio.muted;
-        if (!audio.muted) {
-            audio.play().catch(function() {});
-            btn.innerText = "🔊";
-        } else {
-            btn.innerText = "🔇";
-        }
-    }
-
     // Try to unmute automatically if the browser allows audio autoplay
     window.addEventListener("load", function() {
         var audio = document.getElementById("bgmusic");
-        audio.volume = 0.25;
+        audio.volume = 0.1;
         audio.play().then(function() {
             audio.muted = false;
-            document.getElementById("sound-toggle").innerText = "🔊";
         }).catch(function() {
-            // Autoplay with sound blocked, stays muted until user clicks
+            // Autoplay with sound blocked, stays muted
         });
 
         showNextTip();
